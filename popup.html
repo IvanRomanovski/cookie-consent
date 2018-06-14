@@ -1,0 +1,49 @@
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+<script>
+var consentPopup;
+window.addEventListener("load", function(){
+  window.cookieconsent.initialise({
+    palette: {
+      popup: {
+        background: "#000"
+      },
+      button: {
+        background: "#f1d600"
+      }
+    },
+    position: "bottom",
+    revokable: "true",
+    type: "opt-out",
+    theme: "edgeless",
+    content: {
+      dismiss: "Accept",
+      href: "{{Cookie Declaration Path}}"
+    },
+    law: {
+      regionalLaw: false,
+    },
+    location: false,
+    onInitialise: function (status) {
+      var didConsent = this.hasConsented();
+      if (didConsent) {
+        // enable cookies
+        dataLayer.push({'event':'cookieconsent_given'});
+      }
+    },
+    onStatusChange: function(status, chosenBefore) {
+      var didConsent = this.hasConsented();
+      if (didConsent) {
+        // enable cookies
+        dataLayer.push({'event':'cookieconsent_given'});
+      }
+      document.dispatchEvent(consentStatusChanged);
+    },
+  }, function (popup) {
+    consentPopup = popup;
+    document.dispatchEvent(consentPopupInitialised);
+  }, function (err) {
+    console.error(err);
+  })
+});
+</script>
